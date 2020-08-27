@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: wkc
+---
+testFramework: junit
+sourceLanguage: java

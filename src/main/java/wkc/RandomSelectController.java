@@ -13,9 +13,14 @@ public class RandomSelectController {
     @Inject
     UserSession userSession;
 
-    @Get("/next")
-    public HttpResponse<TeamTopic> getNext() throws IOException {
-        return HttpResponse.ok(userSession.getTeamTopic());
+    @Get("/team")
+    public HttpResponse<Team> getTeam() throws IOException {
+        return HttpResponse.ok(userSession.getTeam());
+    }
+
+    @Get("/topic")
+    public HttpResponse<Topic> getTopic() throws IOException {
+        return HttpResponse.ok(userSession.getTopic());
     }
 
 }

@@ -17,46 +17,34 @@ public class UserSession {
     static List<String> teams = new ArrayList<>();
     static List<String> topics = new ArrayList<>();
 
+    private String teamsFile = "teams.txt";
+
+    private String topicsFile = "topics.txt";
+
 
     public UserSession() throws IOException {
         getTeams();
         getTopics();
     }
 
-    public TeamTopic getTeamTopic() throws IOException {
-        Random random = new Random();
-        if (teams.size() > 0) {
-            int randomTeamNUmber = random.nextInt(teams.size());
-            int randomTopicNumber = random.nextInt(topics.size());
-            String team = teams.get(randomTeamNUmber);
-            teams.remove(team);
-            String topic = topics.get(randomTopicNumber);
-            topics.remove(topic);
-            addToText(team, topic);
-            return new TeamTopic(team, topic);
-        }
-        return new TeamTopic("All teams are now done!", "Thank You!");
-    }
-
-    private void addToText(String team, String topic) throws IOException {
-        String filePath = "/Users/yogendraprabhu/teamTopic.txt";
+    private void addTeamToText(String team) throws IOException {
+        String filePath = "/Users/yogendraprabhu/team.txt";
         FileWriter writer = new FileWriter(filePath, true);
         BufferedWriter bufferedWriter = new BufferedWriter(writer);
-        bufferedWriter.write(String.format("%s,%s\n", team, topic));
+        bufferedWriter.write(String.format("%s\n", team));
+        bufferedWriter.close();
+    }
+
+    private void addTopicToText(String topic) throws IOException {
+        String filePath = "/Users/yogendraprabhu/Topic.txt";
+        FileWriter writer = new FileWriter(filePath, true);
+        BufferedWriter bufferedWriter = new BufferedWriter(writer);
+        bufferedWriter.write(String.format("%s\n", topic));
         bufferedWriter.close();
     }
 
     private void getTopics() throws IOException {
-        File file = new File("/Users/yogendraprabhu/Code/teamtopicselector/build/resources/main/teams.txt");
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String st;
-        while ((st = br.readLine()) != null) {
-            teams.add(st);
-        }
-    }
-
-    private void getTeams() throws IOException {
-        File file = new File("/Users/yogendraprabhu/Code/teamtopicselector/build/resources/main/topics.txt");
+        File file = new File("/Users/yogendraprabhu/Code/teamtopicselector/build/resources/main/" + topicsFile);
         BufferedReader br = new BufferedReader(new FileReader(file));
         String st;
         while ((st = br.readLine()) != null) {
@@ -64,4 +52,36 @@ public class UserSession {
         }
     }
 
+    private void getTeams() throws IOException {
+        File file = new File("/Users/yogendraprabhu/Code/teamtopicselector/build/resources/main/" + teamsFile);
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String st;
+        while ((st = br.readLine()) != null) {
+            teams.add(st);
+        }
+    }
+
+    public Topic getTopic() throws IOException {
+        if (teams.size() > 0) {
+            Random random = new Random();
+            int randomTopicNUmber = random.nextInt(topics.size());
+            String topic = topics.get(randomTopicNUmber);
+            topics.remove(topic);
+            addTopicToText(topic);
+            return new Topic(topic);
+        }
+        return new Topic("All teams are done");
+    }
+
+    public Team getTeam() throws IOException {
+        if (teams.size() > 0) {
+            Random random = new Random();
+            int randomTeamNUmber = random.nextInt(teams.size());
+            String team = teams.get(randomTeamNUmber);
+            teams.remove(team);
+            addTeamToText(team);
+            return new Team(team);
+        }
+        return new Team("All teams are done");
+    }
 }
